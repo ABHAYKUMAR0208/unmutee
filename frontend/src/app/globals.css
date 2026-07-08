@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+:root {
+  /* ── Voice-AI-Agent-UI brand palette ── */
+  --green: #f5a623;
+  /* kept the variable name "green" for backwards compat with existing
+     components (SlantedButton, SquareButton, etc. use text-green/bg-green/
+     border-green) but it now carries the brand amber color. */
+  --brand: #f5a623;
+  --brand-light: #fbbf48;
+  --brand-dark: #d4831a;
+  --accent-cyan: #22d3ee;
+
+  --offwhite: #ffffff;
+  --textgray: #9ca3af;
+  --lightgray: #6b7280;
+  --gray: #1a1b21;
+  --darkgray: #13141a;
+  --background: #0d0e12;
+  --card: #13141a;
+  --card-border: rgba(255, 255, 255, 0.06);
+
+  --orange: #f5ab4a;
+  --pink: #f051db;
+  --purple: #a78bfa;
+  /* for errors */
+  --red: #f55142;
+
+  --speaker-0: var(--brand);
+  --speaker-1: var(--accent-cyan);
+  --speaker-2: var(--pink);
+  --speaker-3: var(--purple);
+
+  font-family:
+    "Rajdhani", "Barlow", var(--font-satoshi),
+    system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+  font-size: 1.1rem;
+
+  color-scheme: dark;
+  color: var(--offwhite);
+  background-color: var(--background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@theme {
+  --color-card: var(--card);
+  --color-brand: var(--brand);
+  --color-brand-light: var(--brand-light);
+  --color-brand-dark: var(--brand-dark);
+  --color-accent-cyan: var(--accent-cyan);
+}
+
+/* ── Voice-AI-Agent-UI style utility classes ── */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.radial-glow-top {
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(245, 166, 35, 0.07) 0%,
+    transparent 50%
+  );
+}
+
+.gradient-text-gold {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #f5a623, #fbbf48);
+}
+
+.status-pill {
+  transition: all 0.2s;
+}
+.status-pill.connected {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+.status-pill.connecting {
+  background: rgba(245, 166, 35, 0.1);
+  border-color: rgba(245, 166, 35, 0.2);
+  color: #fbbf48;
+}
+.status-pill.error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+.status-dot {
+  transition: background 0.2s;
+}
+.connected .status-dot {
+  background: #4ade80;
+  animation: pulse-green 1.5s infinite;
+}
+.connecting .status-dot {
+  background: #fbbf48;
+  animation: pulse-amber 1s infinite;
+}
+.error .status-dot {
+  background: #f87171;
+}
+@keyframes pulse-green {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+@keyframes pulse-amber {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.viz-bar-demo {
+  width: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  transition:
+    height 0.05s ease,
+    background 0.2s;
+  min-height: 4px;
+}
+.viz-bar-demo.mic-active {
+  background: #3b82f6;
+}
+.viz-bar-demo.agent-active {
+  background: #f5a623;
+}
+
+.btn-mic-muted {
+  background-color: #ef4444 !important;
+  color: white !important;
+}
+
+.log-console {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.log-line {
+  color: #6b7280;
+}
+.log-line.info {
+  color: #9ca3af;
+}
+.log-line.success {
+  color: #4ade80;
+}
+.log-line.warn {
+  color: #fbbf48;
+}
+.log-line.error {
+  color: #f87171;
+}
+
+
+/* TODO(vv): better place for the highlighted-word stuff? */
+.highlighted-word {
+  color: black;
+}
+
+/* Create a pseudo-element for the background */
+.highlighted-word::after {
+  content: "";
+  position: absolute;
+  background-color: var(--speaker-color, white);
+  left: -0.25rem;
+  right: -0.25rem;
+  top: -0.25rem;
+  bottom: -0.25rem;
+  border-radius: 0.25rem;
+  z-index: -1;
+}
+
+@theme {
+  /* TODO: deduplicate */
+  --color-green: var(--green);
+  --color-offwhite: var(--offwhite);
+  --color-textgray: var(--textgray);
+  --color-lightgray: var(--lightgray);
+  --color-gray: var(--gray);
+  --color-darkgray: var(--darkgray);
+  --color-orange: var(--orange);
+  --color-pink: var(--pink);
+  --color-purple: var(--purple);
+  --color-red: var(--red);
+  --color-background: var(--background);
+  /* sometimes it's useful to have these as variables too */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --font-family-satoshi: var(--font-satoshi);
+}
